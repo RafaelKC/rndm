@@ -26,7 +26,8 @@
               {
                 "glob": "**/*",
                 "input": "src/content/posts",
-                "output": "/posts"
+                "output": "/posts",
+                "ignore": [".gitkeep"]
               }
             ],
             "styles": ["src/styles.css"],

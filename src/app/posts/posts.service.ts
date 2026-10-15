@@ -9,18 +9,20 @@ import { Post, PostManifest, postBaseUrl, toPost } from './post.model';
 export class PostsService {
   private readonly http = inject(HttpClient);
 
-  /** Newest first (the index is already sorted by date). */
+  /** `undefined` while loading, then the posts, newest first (the index is already sorted by date). */
   readonly posts = toSignal(
     this.http.get<string[]>('/posts/index.json').pipe(
       switchMap((ids) =>
-        forkJoin(
-          ids.map((id) =>
-            this.http.get<PostManifest>(`${postBaseUrl(id)}/manifest.json`).pipe(map((manifest) => toPost(id, manifest))),
-          ),
-        ),
+        // forkJoin([]) completes without emitting, so an empty list needs its own value.
+        ids.length === 0
+          ? of<Post[]>([])
+          : forkJoin(
+              ids.map((id) =>
+                this.http.get<PostManifest>(`${postBaseUrl(id)}/manifest.json`).pipe(map((manifest) => toPost(id, manifest))),
+              ),
+            ),
       ),
       catchError(() => of<Post[]>([])),
     ),
-    { initialValue: [] as Post[] },
   );
 }

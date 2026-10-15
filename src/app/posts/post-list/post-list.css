@@ -10,3 +10,12 @@
   padding: 0;
   list-style: none;
 }
+
+.empty {
+  margin: 0;
+  padding: var(--space-6) var(--space-5);
+  background: var(--bg-light);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-lg);
+  text-align: center;
+}

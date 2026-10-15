@@ -14,6 +14,7 @@ Step-by-step plan to build the **rndm.chicovis.dev** blog, in order. Check each 
 - [x] Localization (i18n): `en` (default) and `pt`, language in the route, ngx-translate, language badge, `hreflang` alternates, theme/language cookies
 - [x] Theme and language cookies shared across `*.chicovis.dev` (blog side)
 - [x] Switch to pnpm
+- [x] `/new-post` skill with templates, post validation, automatic word count and generated `sitemap.xml`
 - [x] Home list built from the real manifests (generated `posts/index.json`), cards fully clickable
 - [x] Post page `/:lang/post/:id`: manifest + Markdown (with raw HTML) per language, prerendered, translated SEO and `BlogPosting` JSON-LD, one example post
 - [x] Static prerender (`@angular/ssr`, `outputMode: static`): `/en/` and `/pt/` are generated as full HTML at build time
@@ -56,7 +57,6 @@ src/content/posts/
 
 - [ ] Add `draft` and `updated` to the manifest; skip `draft: true` posts in production
 - [ ] Syntax highlighting for code blocks
-- [ ] Reuse the generated post index to build `sitemap.xml` (see step 5)
 
 ### 3. Pages
 
@@ -68,11 +68,10 @@ src/content/posts/
 - [ ] Run Lighthouse (performance, accessibility, SEO) and fix what shows up
 - [ ] Review the Core Web Vitals of the prerendered pages
 
-### 5. Sitemap
+### 5. Search Console
 
-- [ ] Generate `sitemap.xml` automatically at build time from the posts (today it is manual and only has the two home pages)
-- [ ] Include each language of each post, with `<lastmod>` and `hreflang` alternates
-- [ ] Keep `robots.txt` pointing to the sitemap
+- [x] `sitemap.xml` generated at build time from the posts, with `<lastmod>` and `hreflang` alternates
+- [x] `robots.txt` points to the sitemap
 - [ ] Register `rndm.chicovis.dev` in Search Console, add the verification meta tag and submit the sitemap
 
 ### 6. Docker and deploy pipeline (last step)
@@ -80,7 +79,7 @@ src/content/posts/
 Same approach as chicovis.dev (`../rkc`): a Docker image on the home server, behind Nginx Proxy Manager, deployed by a GitHub Actions workflow over SSH.
 
 - [ ] `Dockerfile`, multi-stage: Node ≥ 24.15 + pnpm (`corepack`) runs `pnpm install --frozen-lockfile` and `pnpm build`; then `nginx:stable-alpine` serves `dist/rndm/browser`
-- [ ] `nginx.conf` for the prerendered output: `/` and unknown paths → `index.csr.html`; `/en/` and `/pt/` → their `index.html`; hashed assets cached for 1 year (`immutable`), HTML not cached; gzip/brotli on
+- [ ] `nginx.conf` for the prerendered output: `/` and unknown paths → `index.csr.html`; `/en/` and `/pt/` → their `index.html`; `/posts/` served with `try_files $uri =404` (a missing post file must be a real 404, so the app can redirect to the home), hashed assets cached for 1 year (`immutable`), HTML not cached; gzip/brotli on
 - [ ] `docker-compose.yml`: service `rndm` (image `rndm-site:latest`, `restart: always`) on the external `web` network with the alias `rndm`, no published ports
 - [ ] Nginx Proxy Manager: proxy host `rndm.chicovis.dev` → `rndm:80`, Let's Encrypt certificate, Force SSL, HTTP/2 (HTTPS is required because the shared cookies are `Secure`)
 - [ ] DNS: `rndm.chicovis.dev` pointing at the server

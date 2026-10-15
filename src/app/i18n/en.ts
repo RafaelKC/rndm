@@ -22,6 +22,7 @@ export const en = {
     title: 'Latest posts',
     tags: 'Tags',
     words: '{{count}} words',
+    empty: 'No posts yet. Check back soon!',
     availableIn: 'Available in:',
   },
   post: {

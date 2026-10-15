@@ -24,6 +24,7 @@ export const pt: Translations = {
     title: 'Últimos posts',
     tags: 'Tags',
     words: '{{count}} palavras',
+    empty: 'Ainda não há posts por aqui. Volte em breve!',
     availableIn: 'Disponível em:',
   },
   post: {

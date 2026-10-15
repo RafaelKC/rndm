@@ -1,10 +1,16 @@
 <section class="posts container" aria-labelledby="posts-title">
   <h2 id="posts-title" class="section-header">{{ 'posts.title' | translate }}</h2>
-  <ul class="post-list">
-    @for (post of posts(); track post.id) {
-      <li>
-        <app-post-card [post]="post" />
-      </li>
+  @if (posts(); as list) {
+    @if (list.length > 0) {
+      <ul class="post-list">
+        @for (post of list; track post.id) {
+          <li>
+            <app-post-card [post]="post" />
+          </li>
+        }
+      </ul>
+    } @else {
+      <p class="empty">{{ 'posts.empty' | translate }}</p>
     }
-  </ul>
+  }
 </section>

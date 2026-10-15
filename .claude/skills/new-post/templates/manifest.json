@@ -1,0 +1,15 @@
+{
+  "title": { "en": "Post title", "pt": "Título do post" },
+  "summary": {
+    "en": "One or two sentences (about 155 characters): shown on the card and used as the SEO description.",
+    "pt": "Uma ou duas frases (cerca de 155 caracteres): aparece no card e é usada como description de SEO."
+  },
+  "cover": "assets/cover.jpg",
+  "tags": [
+    { "en": "Movie", "pt": "Filme" },
+    { "en": "Review", "pt": "Resenha" }
+  ],
+  "date": "2026-01-31",
+  "wordCount": {},
+  "availableLangs": ["pt", "en"]
+}
