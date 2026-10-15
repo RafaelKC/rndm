@@ -79,15 +79,27 @@ Prerender itself is done (see "Done"). Left for when posts exist:
 - [ ] Add the post routes to `app.routes.server.ts` with `getPrerenderParams` (every slug, both languages)
 - [ ] Verify the generated HTML of a post already contains its content, in the right language
 
-### 6. Deploy
+### 6. Launch checks
 
-- [ ] Decide where to host and how to publish (chicovis.dev uses Docker)
-- [ ] Point the `rndm.chicovis.dev` subdomain at it
 - [ ] Run Lighthouse (performance, accessibility, SEO) and fix what shows up
+- [ ] Review the Core Web Vitals of the prerendered pages
 
-### 7. Sitemap (last step)
+### 7. Sitemap
 
 - [ ] Generate `sitemap.xml` automatically at build time from the posts (today it is manual and only has the two home pages)
 - [ ] Include each language of each post, with `<lastmod>` and `hreflang` alternates
 - [ ] Keep `robots.txt` pointing to the sitemap
 - [ ] Register `rndm.chicovis.dev` in Search Console, add the verification meta tag and submit the sitemap
+
+### 8. Docker and deploy pipeline (last step)
+
+Same approach as chicovis.dev (`../rkc`): a Docker image on the home server, behind Nginx Proxy Manager, deployed by a GitHub Actions workflow over SSH.
+
+- [ ] `Dockerfile`, multi-stage: Node ≥ 24.15 + pnpm (`corepack`) runs `pnpm install --frozen-lockfile` and `pnpm build`; then `nginx:stable-alpine` serves `dist/rndm/browser`
+- [ ] `nginx.conf` for the prerendered output: `/` and unknown paths → `index.csr.html`; `/en/` and `/pt/` → their `index.html`; hashed assets cached for 1 year (`immutable`), HTML not cached; gzip/brotli on
+- [ ] `docker-compose.yml`: service `rndm` (image `rndm-site:latest`, `restart: always`) on the external `web` network with the alias `rndm`, no published ports
+- [ ] Nginx Proxy Manager: proxy host `rndm.chicovis.dev` → `rndm:80`, Let's Encrypt certificate, Force SSL, HTTP/2 (HTTPS is required because the shared cookies are `Secure`)
+- [ ] DNS: `rndm.chicovis.dev` pointing at the server
+- [ ] `.github/workflows/deploy.yml`: on push to `main` (and manual dispatch), SSH into the server, `git pull`, `docker build`, `docker compose up -d`, `docker image prune -f` (same secrets as the personal site)
+- [ ] `.dockerignore` (`node_modules`, `dist`, `.angular`, `.git`)
+- [ ] Optional: run build and tests in the workflow before deploying
