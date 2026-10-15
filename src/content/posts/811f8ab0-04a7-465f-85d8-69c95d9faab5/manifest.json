@@ -1,0 +1,30 @@
+{
+  "title": {
+    "en": "What this blog is and how to write a post",
+    "pt": "O que é este blog e como escrever um post"
+  },
+  "summary": {
+    "en": "The first post: what this blog is, how it is built, and a step-by-step tutorial, written mostly for myself, on how to create a new post.",
+    "pt": "O primeiro post: o que é este blog, como ele foi feito e um passo a passo, escrito principalmente para mim, de como criar um novo post."
+  },
+  "cover": "assets/cover.png",
+  "tags": [
+    {
+      "en": "Software",
+      "pt": "Software"
+    },
+    {
+      "en": "Tutorial",
+      "pt": "Tutorial"
+    }
+  ],
+  "date": "2026-10-15",
+  "wordCount": {
+    "pt": 647,
+    "en": 656
+  },
+  "availableLangs": [
+    "pt",
+    "en"
+  ]
+}

@@ -1,4 +1,6 @@
 .post {
+  /* One reading width for title, cover, meta and text, so everything lines up and sits centered. */
+  max-width: 820px;
   padding-top: 4rem;
   padding-bottom: var(--space-10);
 }
@@ -47,15 +49,10 @@
 }
 
 .notice {
-  max-width: 720px;
   margin: 0 0 var(--space-5);
   padding: var(--space-3) var(--space-4);
   background: var(--bg-light);
   border-left: 3px solid var(--accent);
   border-radius: var(--radius-sm);
   font-size: 0.9rem;
-}
-
-.prose {
-  max-width: 720px;
 }
