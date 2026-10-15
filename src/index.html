@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <title>Random | Rafael Chicovis</title>
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Random: the personal blog of Rafael Chicovis, a software engineer, with posts and notes on all sorts of topics."
+    />
+    <meta name="author" content="Rafael Chicovis" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <link rel="canonical" href="https://rndm.chicovis.dev/en/" />
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Random | Rafael Chicovis" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:url" content="https://rndm.chicovis.dev/en/" />
+    <meta property="og:title" content="Random | Rafael Chicovis" />
+    <meta
+      property="og:description"
+      content="Random: the personal blog of Rafael Chicovis, a software engineer, with posts and notes on all sorts of topics."
+    />
+    <meta property="og:image" content="https://chicovis.dev/og-image.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Random | Rafael Chicovis" />
+    <meta
+      name="twitter:description"
+      content="Random: the personal blog of Rafael Chicovis, a software engineer, with posts and notes on all sorts of topics."
+    />
+    <meta name="twitter:image" content="https://chicovis.dev/og-image.jpg" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://rndm.chicovis.dev/#website",
+            "url": "https://rndm.chicovis.dev/",
+            "name": "Random | Rafael Chicovis",
+            "inLanguage": ["en", "pt-BR"],
+            "publisher": { "@id": "https://chicovis.dev/#person" }
+          },
+          {
+            "@type": "Person",
+            "@id": "https://chicovis.dev/#person",
+            "name": "Rafael Chicovis",
+            "jobTitle": "Software Engineer",
+            "url": "https://chicovis.dev",
+            "sameAs": ["https://github.com/RafaelKC", "https://linkedin.com/in/rafael-chicovis"]
+          }
+        ]
+      }
+    </script>
+    <link rel="icon" type="image/svg+xml" href="https://chicovis.dev/favicon.svg" />
+
+    <!-- Apply theme and language before first paint (no flash). Theme: cookie → system preference. -->
+    <script>
+      (function () {
+        var root = document.documentElement;
+        var theme = (document.cookie.match(/(?:^|; )theme=(dark|light)/) || [])[1];
+        if (!theme) {
+          try {
+            theme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+          } catch (e) {
+            theme = 'dark';
+          }
+        }
+        root.setAttribute('data-theme', theme);
+        if (location.pathname.split('/')[1] === 'pt') root.setAttribute('lang', 'pt-BR');
+      })();
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <app-root></app-root>
+    <noscript>This site needs JavaScript to work.</noscript>
+  </body>
+</html>

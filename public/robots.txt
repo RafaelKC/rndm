@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://rndm.chicovis.dev/sitemap.xml

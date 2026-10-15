@@ -1,0 +1,28 @@
+<header class="navbar">
+  <a class="logo accent" [routerLink]="['/', languageService.lang()]">rndm.chicovis.dev</a>
+  <nav [attr.aria-label]="'a11y.mainNavigation' | translate">
+    <a class="nav-link" href="https://chicovis.dev" target="_blank" rel="noopener noreferrer">
+      {{ 'nav.site' | translate }}
+      <span class="sr-only">{{ 'a11y.siteOpensInNewTab' | translate }}</span>
+      <i class="ti ti-arrow-up-right" aria-hidden="true"></i>
+    </a>
+    <button
+      class="icon-btn"
+      type="button"
+      [attr.aria-label]="(themeService.isLight() ? 'a11y.switchToDark' : 'a11y.switchToLight') | translate"
+      (click)="themeService.toggle()"
+    >
+      <i class="ti" [class.ti-moon]="themeService.isLight()" [class.ti-sun]="!themeService.isLight()" aria-hidden="true"></i>
+    </button>
+    <a
+      class="badge"
+      [routerLink]="alternatePath()"
+      [attr.lang]="otherLangMeta().htmlLang"
+      [attr.hreflang]="otherLangMeta().hreflang"
+      [attr.aria-label]="'a11y.switchLanguage' | translate: { lang: otherLang().toUpperCase() }"
+      (click)="languageService.remember(otherLang())"
+    >
+      {{ otherLang().toUpperCase() }}
+    </a>
+  </nav>
+</header>
