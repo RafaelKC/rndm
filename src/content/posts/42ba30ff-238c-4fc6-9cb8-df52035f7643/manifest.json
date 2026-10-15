@@ -1,0 +1,35 @@
+{
+  "title": {
+    "en": "twig: one isolated workspace per card",
+    "pt": "twig: um ambiente isolado por card"
+  },
+  "summary": {
+    "en": "twig turns a card number into git worktrees across all the repos a task touches, an AI agent per repo in herdr and a VS Code workspace, in one command.",
+    "pt": "O twig transforma o número de um card em worktrees de todos os repos da tarefa, um agente de IA por repo no herdr e um workspace do VS Code, com um comando."
+  },
+  "cover": "assets/cover.png",
+  "tags": [
+    {
+      "en": "Software",
+      "pt": "Software"
+    },
+    {
+      "en": "CLI",
+      "pt": "CLI"
+    },
+    {
+      "en": "Open source",
+      "pt": "Código aberto"
+    }
+  ],
+  "date": "2026-10-15",
+  "draft": true,
+  "wordCount": {
+    "pt": 1095,
+    "en": 1042
+  },
+  "availableLangs": [
+    "pt",
+    "en"
+  ]
+}
