@@ -1,7 +1,7 @@
 <header class="navbar">
   <a class="logo accent" [routerLink]="['/', languageService.lang()]">rndm.chicovis.dev</a>
   <nav [attr.aria-label]="'a11y.mainNavigation' | translate">
-    <a class="nav-link" href="https://chicovis.dev" target="_blank" rel="noopener noreferrer">
+    <a class="nav-link" [href]="siteUrl()" target="_blank" rel="noopener noreferrer">
       {{ 'nav.site' | translate }}
       <span class="sr-only">{{ 'a11y.siteOpensInNewTab' | translate }}</span>
       <i class="ti ti-arrow-up-right" aria-hidden="true"></i>

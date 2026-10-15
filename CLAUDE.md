@@ -22,7 +22,7 @@ Personal blog "Random | Rafael Chicovis" (Angular 22, standalone components, sig
 - `/` (and unknown paths) redirect to a language: **saved choice (cookie `lang`) → browser language (`navigator.languages`) → `en`**. See `core/language.guards.ts`.
 - `LanguageService.apply()` sets the route's language (translations + `<html lang>`) and does **not** persist. `remember()` saves the cookie and is called only when the user clicks the language badge. A crawler or a shared link is not a user choice.
 - The header badge (`EN`/`PT`, like chicovis.dev) links to the same page in the other language.
-- Cookies: `theme` and `lang`, both first-party, `Path=/`, `Max-Age` 1 year, `SameSite=Lax` (+ `Secure` on HTTPS), written by `CookieService`. They are user-requested preferences, with no tracking and no third parties, so **no consent banner is needed**. If analytics, ads or any tracking are ever added, a consent banner (LGPD/GDPR) becomes mandatory first. Googlebot ignores cookies; it relies on the language in the URL.
+- Cookies: `theme` (`dark|light`) and `lang` (`en|pt`), both first-party, `Path=/`, `Max-Age` 1 year, `SameSite=Lax` (+ `Secure` on HTTPS), written by `CookieService`. On `chicovis.dev` and its subdomains they are written with `Domain=.chicovis.dev`, so they are **shared with the personal site** (same names, values and attributes on both sides; `Domain` is omitted on `localhost`). They are user-requested preferences, with no tracking and no third parties, so **no consent banner is needed**. If analytics, ads or any tracking are ever added, a consent banner (LGPD/GDPR) becomes mandatory first. Googlebot ignores cookies; it relies on the language in the URL.
 
 ## Design system
 

@@ -12,8 +12,20 @@ Step-by-step plan to build the **rndm.chicovis.dev** blog, in order. Check each 
 - [x] `CLAUDE.md` with the project instructions
 - [x] Project renamed from `codeme` to `rndm`
 - [x] Localization (i18n): `en` (default) and `pt`, language in the route, ngx-translate, language badge, `hreflang` alternates, theme/language cookies
+- [x] Theme and language cookies shared across `*.chicovis.dev` (blog side)
 
 ## Next step
+
+### 0. Share theme and language with the personal site (Astro, `../rkc`)
+
+The blog already writes `theme` and `lang` with `Domain=.chicovis.dev`. The Astro site still has to do the same, so a choice made on one site applies to the other. Not started.
+
+- [ ] Theme script: read the `theme` cookie first, then `localStorage` (legacy fallback), then the system preference
+- [ ] Theme toggle: write the cookie with `theme=dark|light; Domain=.chicovis.dev; Path=/; Max-Age=31536000; SameSite=Lax; Secure`
+- [ ] Language badge: write the `lang` cookie (`en|pt`) with the same attributes
+- [ ] Root redirect (`/`): saved `lang` cookie → browser language → default, same order as the blog
+- [ ] Clear the old host-only `theme` cookie (`Max-Age=0`, no `Domain`) before writing the shared one; omit `Domain` on `localhost`
+- [ ] Add a line about theme and language cookies to a future privacy page
 
 ### 1. Posts as Markdown
 

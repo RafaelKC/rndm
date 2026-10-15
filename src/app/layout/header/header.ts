@@ -28,6 +28,9 @@ export class Header {
 
   protected readonly otherLang = computed<Lang>(() => (this.languageService.lang() === 'en' ? 'pt' : 'en'));
   protected readonly otherLangMeta = computed(() => LANG_META[this.otherLang()]);
+  /** The personal site, in the same language as this page (chicovis.dev/en/, chicovis.dev/pt/). */
+  protected readonly siteUrl = computed(() => `https://chicovis.dev/${this.languageService.lang()}/`);
+
   /** Same page in the other language. */
   protected readonly alternatePath = computed(() => withLang(this.url(), this.otherLang()));
 }
