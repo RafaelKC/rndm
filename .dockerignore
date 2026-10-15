@@ -1,0 +1,10 @@
+node_modules
+dist
+.angular
+.git
+.github
+.claude
+.vscode
+docs
+*.md
+!src/content/**/*.md

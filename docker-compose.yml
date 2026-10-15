@@ -1,0 +1,15 @@
+# Runs the image built by .github/workflows/deploy.yml, behind Nginx Proxy Manager:
+# proxy host rndm.chicovis.dev -> rndm:80 (the alias below, on the external "web" network).
+services:
+  rndm:
+    image: ghcr.io/rafaelkc/rndm:latest
+    container_name: rndm-container
+    restart: always
+    networks:
+      web:
+        aliases:
+          - rndm
+
+networks:
+  web:
+    external: true

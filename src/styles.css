@@ -1,4 +1,4 @@
-@import "@tabler/icons-webfont/dist/tabler-icons.min.css";
+@import "./icons.css";
 
 /* ==========================================================================
    Tokens (same values as chicovis.dev)
@@ -14,11 +14,21 @@
   --accent: #ff6b00;
   --accent-hover: #e65a00;
   --accent-soft: rgba(255, 107, 0, 0.1);
+  /* Accent for small text (4.5:1 on the page background and on --accent-soft) */
+  --accent-text: #ff6b00;
   --text-dim: #cbd5e1;
   --white: #f8fafc;
   --border: #262626;
   --navbar-bg: rgba(10, 10, 10, 0.95);
   --on-accent: #ffffff;
+
+  /* Code highlighting */
+  --code-keyword: #ff8a3d;
+  --code-string: #86efac;
+  --code-number: #93c5fd;
+  --code-comment: #94a3b8;
+  --code-title: #fcd34d;
+  --code-type: #c4b5fd;
 }
 
 :root[data-theme="light"] {
@@ -29,11 +39,19 @@
   --accent: #e65a00;
   --accent-hover: #cc5000;
   --accent-soft: rgba(230, 90, 0, 0.1);
+  --accent-text: #b04500;
   --text-dim: #3f3f46;
   --white: #18181b;
   --border: #d4d4d8;
   --navbar-bg: rgba(255, 255, 255, 0.95);
   --on-accent: #ffffff;
+
+  --code-keyword: #b84a00;
+  --code-string: #166534;
+  --code-number: #1d4ed8;
+  --code-comment: #52525b;
+  --code-title: #854d0e;
+  --code-type: #6d28d9;
 }
 
 :root {
@@ -292,7 +310,7 @@ textarea:focus {
   padding: 2px 8px;
   background: var(--accent-soft);
   border-radius: var(--radius-sm);
-  color: var(--accent);
+  color: var(--accent-text);
   font-size: 0.7rem;
   font-weight: 600;
 }
@@ -398,7 +416,7 @@ textarea:focus {
 }
 
 .prose a {
-  color: var(--accent);
+  color: var(--accent-text);
   text-underline-offset: 3px;
 }
 
@@ -509,3 +527,38 @@ textarea:focus {
 .prose details[open] summary {
   margin-bottom: var(--space-2);
 }
+
+/* Code highlighting (highlight.js classes, colored with tokens) */
+.prose .hljs-keyword,
+.prose .hljs-selector-tag,
+.prose .hljs-literal,
+.prose .hljs-built_in,
+.prose .hljs-name { color: var(--code-keyword); }
+
+.prose .hljs-string,
+.prose .hljs-attr,
+.prose .hljs-regexp,
+.prose .hljs-addition { color: var(--code-string); }
+
+.prose .hljs-number,
+.prose .hljs-symbol,
+.prose .hljs-bullet,
+.prose .hljs-variable { color: var(--code-number); }
+
+.prose .hljs-comment,
+.prose .hljs-quote,
+.prose .hljs-meta,
+.prose .hljs-deletion { color: var(--code-comment); font-style: italic; }
+
+.prose .hljs-title,
+.prose .hljs-section,
+.prose .hljs-function { color: var(--code-title); }
+
+.prose .hljs-type,
+.prose .hljs-class,
+.prose .hljs-params,
+.prose .hljs-attribute,
+.prose .hljs-tag { color: var(--code-type); }
+
+.prose .hljs-emphasis { font-style: italic; }
+.prose .hljs-strong { font-weight: 700; }

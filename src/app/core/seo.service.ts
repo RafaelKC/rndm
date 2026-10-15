@@ -27,6 +27,8 @@ export interface SeoPageData {
   alternateLangs: Lang[];
   /** `YYYY-MM-DD`, for articles. */
   published?: string;
+  /** `YYYY-MM-DD`, for articles that were edited after publishing. */
+  modified?: string;
 }
 
 /**
@@ -87,6 +89,11 @@ export class SeoService {
     } else {
       this.meta.removeTag('property="article:published_time"');
     }
+    if (page?.modified) {
+      this.meta.updateTag({ property: 'article:modified_time', content: page.modified });
+    } else {
+      this.meta.removeTag('property="article:modified_time"');
+    }
 
     this.setCanonical(url);
     this.setAlternates(alternates, lang, rest);
@@ -134,6 +141,7 @@ export class SeoService {
       mainEntityOfPage: url,
       inLanguage: LANG_META[page.lang].htmlLang,
       datePublished: page.published,
+      dateModified: page.modified ?? page.published,
       author: { '@id': 'https://chicovis.dev/#person' },
       isPartOf: { '@id': `${SITE_URL}/#website` },
     });

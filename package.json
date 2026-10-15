@@ -4,10 +4,11 @@
   "scripts": {
     "ng": "ng",
     "start": "node scripts/prepare-posts.mjs && ng serve",
-    "build": "node scripts/prepare-posts.mjs && ng build",
+    "build": "node scripts/prepare-posts.mjs --production && ng build && node scripts/prune-drafts.mjs",
     "watch": "node scripts/prepare-posts.mjs && ng build --watch --configuration development",
     "test": "ng test",
-    "posts": "node scripts/prepare-posts.mjs"
+    "posts": "node scripts/prepare-posts.mjs",
+    "icons": "node scripts/build-icons.mjs"
   },
   "private": true,
   "packageManager": "pnpm@11.4.0",
@@ -21,8 +22,9 @@
     "@angular/router": "^22.2.0",
     "@angular/ssr": "^22.2.2",
     "@ngx-translate/core": "^18.0.0",
-    "@tabler/icons-webfont": "^3.49.0",
+    "highlight.js": "^11.12.0",
     "marked": "^18.1.1",
+    "marked-highlight": "^2.2.4",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },
@@ -30,9 +32,11 @@
     "@angular/build": "^22.2.2",
     "@angular/cli": "^22.2.2",
     "@angular/compiler-cli": "^22.2.0",
+    "@tabler/icons-webfont": "^3.49.0",
     "@types/node": "^24.19.2",
     "jsdom": "^30.0.0",
     "prettier": "^3.8.1",
+    "subset-font": "^2.9.0",
     "typescript": "~6.0.2",
     "vitest": "^5.0.0"
   }

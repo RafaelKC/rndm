@@ -14,6 +14,9 @@ Step-by-step plan to build the **rndm.chicovis.dev** blog, in order. Check each 
 - [x] Localization (i18n): `en` (default) and `pt`, language in the route, ngx-translate, language badge, `hreflang` alternates, theme/language cookies
 - [x] Theme and language cookies shared across `*.chicovis.dev` (blog side)
 - [x] Switch to pnpm
+- [x] Manifest `draft` (left out of production) and `updated`; syntax highlighting; accessible tag/link color token
+- [x] Smaller bundle: icon font subset (initial JS+CSS 537 kB → 325 kB)
+- [x] `Dockerfile`, `nginx.conf` (tested with podman), `docker-compose.yml`, manual `deploy.yml` that builds on the runner
 - [x] `/new-post` skill with templates, post validation, automatic word count and generated `sitemap.xml`
 - [x] Home list built from the real manifests (generated `posts/index.json`), cards fully clickable
 - [x] Post page `/:lang/post/:id`: manifest + Markdown (with raw HTML) per language, prerendered, translated SEO and `BlogPosting` JSON-LD, one example post
@@ -47,23 +50,13 @@ src/content/posts/
     assets/         # images and files used by the post
 ```
 
-- [x] Define the `manifest.json` format (`PostManifest`; still to add: `updated`, `draft`)
+- [x] Define the `manifest.json` format (`PostManifest`, with optional `updated` and `draft`)
 - [x] Define Markdown conventions (see CLAUDE.md, "Posts")
 - [x] Create a sample post to validate the structure
 
 ## Following steps
 
-### 2. Load and render posts
-
-- [ ] Add `draft` and `updated` to the manifest; skip `draft: true` posts in production
-- [ ] Syntax highlighting for code blocks
-
-### 3. Pages
-
-- [ ] Friendly 404 page
-- [ ] Component styles, using only design-system tokens and classes
-
-### 4. Launch checks
+### 4. Launch checks (after go live)
 
 - [ ] Run Lighthouse (performance, accessibility, SEO) and fix what shows up
 - [ ] Review the Core Web Vitals of the prerendered pages
@@ -74,15 +67,12 @@ src/content/posts/
 - [x] `robots.txt` points to the sitemap
 - [ ] Register `rndm.chicovis.dev` in Search Console, add the verification meta tag and submit the sitemap
 
-### 6. Docker and deploy pipeline (last step)
+### 6. Go live (manual steps, in order)
 
-Same approach as chicovis.dev (`../rkc`): a Docker image on the home server, behind Nginx Proxy Manager, deployed by a GitHub Actions workflow over SSH.
+The files are done and the image builds and routes correctly (tested with podman). What is left is on the server and on GitHub:
 
-- [ ] `Dockerfile`, multi-stage: Node ≥ 24.15 + pnpm (`corepack`) runs `pnpm install --frozen-lockfile` and `pnpm build`; then `nginx:stable-alpine` serves `dist/rndm/browser`
-- [ ] `nginx.conf` for the prerendered output: `/` and unknown paths → `index.csr.html`; `/en/` and `/pt/` → their `index.html`; `/posts/` served with `try_files $uri =404` (a missing post file must be a real 404, so the app can redirect to the home), hashed assets cached for 1 year (`immutable`), HTML not cached; gzip/brotli on
-- [ ] `docker-compose.yml`: service `rndm` (image `rndm-site:latest`, `restart: always`) on the external `web` network with the alias `rndm`, no published ports
-- [ ] Nginx Proxy Manager: proxy host `rndm.chicovis.dev` → `rndm:80`, Let's Encrypt certificate, Force SSL, HTTP/2 (HTTPS is required because the shared cookies are `Secure`)
 - [ ] DNS: `rndm.chicovis.dev` pointing at the server
-- [ ] `.github/workflows/deploy.yml`: on push to `main` (and manual dispatch), SSH into the server, `git pull`, `docker build`, `docker compose up -d`, `docker image prune -f` (same secrets as the personal site)
-- [ ] `.dockerignore` (`node_modules`, `dist`, `.angular`, `.git`)
-- [ ] Optional: run build and tests in the workflow before deploying
+- [ ] GitHub: run **Actions > Deploy rndm > Run workflow** once (builds and pushes `ghcr.io/rafaelkc/rndm`), then make the package **public** (GitHub profile > Packages > rndm > Package settings > Change visibility), or run `docker login ghcr.io` on the server
+- [ ] Server: `mkdir -p ~/rndm`, fetch `docker-compose.yml`, `docker compose pull && docker compose up -d` (the workflow does this over SSH with the same secrets as the personal site: `OCI_HOST`, `OCI_USER`, `OCI_SSH_KEY`)
+- [ ] Nginx Proxy Manager: proxy host `rndm.chicovis.dev` → `rndm:80`, Let's Encrypt certificate, Force SSL, HTTP/2 (HTTPS is required because the shared cookies are `Secure`)
+- [ ] Optional: add the `push` trigger to `deploy.yml` once deploys are known to be light on the server

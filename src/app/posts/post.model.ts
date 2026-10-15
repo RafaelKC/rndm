@@ -13,6 +13,10 @@ export interface PostManifest {
   date: string;
   wordCount: Localized<number>;
   availableLangs: Lang[];
+  /** `YYYY-MM-DD`; set when a published post is edited. */
+  updated?: string;
+  /** Drafts are visible in development only. */
+  draft?: boolean;
 }
 
 export interface Post {

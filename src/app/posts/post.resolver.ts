@@ -1,12 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { RedirectCommand, ResolveFn, Router } from '@angular/router';
-import { catchError, map, of, switchMap } from 'rxjs';
+import { catchError, from, map, of, switchMap } from 'rxjs';
 import { SeoPageData } from '../core/seo.service';
 import { LanguageService } from '../core/language.service';
 import { DEFAULT_LANG, Lang, isLang } from '../i18n/i18n.config';
 import { localize } from '../i18n/localized';
-import { renderMarkdown } from './markdown';
 import { GUID_PATTERN, Post, PostManifest, pickContentLang, postBaseUrl, toPost } from './post.model';
 
 export interface PostPageData {
@@ -34,12 +33,14 @@ export const postResolver: ResolveFn<PostPageData | RedirectCommand> = (route) =
     switchMap((manifest) => {
       const contentLang = pickContentLang(manifest.availableLangs, lang, DEFAULT_LANG);
       return http.get(`${postBaseUrl(id)}/${contentLang}.md`, { responseType: 'text' }).pipe(
-        map((markdown): PostPageData => {
+        // Lazy: the renderer (marked + highlight.js) is only needed on the post page.
+        switchMap((markdown) => from(import('./markdown').then((m) => m.renderMarkdown(markdown, id)))),
+        map((html): PostPageData => {
           const post = toPost(id, manifest);
           return {
             post,
             contentLang,
-            html: renderMarkdown(markdown, id),
+            html,
             seo: {
               title: localize(post.title, contentLang) ?? '',
               description: localize(post.summary, contentLang) ?? '',
@@ -48,6 +49,7 @@ export const postResolver: ResolveFn<PostPageData | RedirectCommand> = (route) =
               lang: contentLang,
               alternateLangs: post.availableLangs,
               published: manifest.date,
+              modified: manifest.updated,
             },
           };
         }),

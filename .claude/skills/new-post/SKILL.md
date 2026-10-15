@@ -26,7 +26,8 @@ src/content/posts/<guid>/
 | `manifest.json` → `summary` | 1–2 sentences (~155 chars) per language. Shown on the home card **and used as the SEO/Open Graph description**. |
 | `manifest.json` → `cover` | Image path relative to the post folder, e.g. `assets/cover.jpg`. Raster (jpg/png/webp), ideally 1200×630: it is the card image, the page banner and the `og:image` for link previews. |
 | `manifest.json` → `tags` | List of `{ "en": "...", "pt": "..." }`. Short labels saying what the post is (Movie, Game, Book, Series, Software...). Same tag, both translations. |
-| `manifest.json` → `date` | `YYYY-MM-DD`. Sorts the list and is the publication date in SEO. Optional `updated` (same format) after editing a published post; it becomes the sitemap `lastmod`. |
+| `manifest.json` → `date` | `YYYY-MM-DD`. Sorts the list and is the publication date in SEO. Optional `updated` (same format) after editing a published post; it becomes the sitemap `lastmod`, `article:modified_time` and `dateModified`. |
+| `manifest.json` → `draft` | Optional. `true` keeps the post out of production (index, sitemap, prerender and build output) while it is visible in `pnpm start`. Remove it (or set `false`) to publish. Use it while writing. |
 | `manifest.json` → `wordCount` | Leave `{}`: it is computed from the `.md` files by `pnpm posts` (runs automatically on `pnpm start`/`build`). |
 | `manifest.json` → `availableLangs` | Languages that have a `.md` file, e.g. `["pt","en"]`. A post in one language only is fine: visitors in the other language get it with a notice. |
 | `<lang>.md` | The body, in Markdown. See the rules below. |
@@ -55,7 +56,7 @@ Every descriptive string (`title`, `summary`, tags) is a `{ "en": "...", "pt": "
 - **Images**: `![meaningful alt text](assets/file.jpg)`. `alt` is required (accessibility); use `alt=""` only for purely decorative images. Prefer to also give `width`/`height` when using raw `<img>`.
 - **Raw HTML is allowed in the middle of the Markdown**: `details`/`summary`, `kbd`, `mark`, `figure`/`figcaption`, `table`, `video`, `audio`, `sup`/`sub`, etc. Angular sanitizes it: `<script>`, `<iframe>`, `style="..."` and `on*="..."` are removed. Leave a blank line around HTML blocks so Markdown keeps working around them.
 - **Links**: descriptive text (never "click here"); external links as full `https://` URLs.
-- **Code**: fenced blocks with a language (` ```ts `), inline code with backticks.
+- **Code**: fenced blocks with a language (` ```ts `) get syntax highlighting (bash, csharp, css, javascript, json, markdown, python, typescript, html/xml, yaml); inline code with backticks.
 - **Review posts** work best as: a spoiler-free opening, what worked, what didn't, verdict. Add a spoiler warning before spoilers (a `<details>` is a good way to hide them).
 - Write in the author's voice: direct and plain, no filler or marketing tone.
 - Everything user-visible stays in the post language; instructions and code comments in this repo stay in English.

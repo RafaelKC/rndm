@@ -1,13 +1,18 @@
-import { readdirSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { RenderMode, ServerRoute } from '@angular/ssr';
 import { SUPPORTED_LANGS } from './i18n/i18n.config';
 
-/** Post ids are the folder names in `src/content/posts/`. */
+/** Post ids are the folder names in `src/content/posts/`, except drafts (those are never prerendered). */
 function listPostIds(): string[] {
-  return readdirSync(join(process.cwd(), 'src/content/posts'), { withFileTypes: true })
+  const dir = join(process.cwd(), 'src/content/posts');
+  return readdirSync(dir, { withFileTypes: true })
     .filter((entry) => entry.isDirectory())
-    .map((entry) => entry.name);
+    .map((entry) => entry.name)
+    .filter((id) => {
+      const manifest = join(dir, id, 'manifest.json');
+      return existsSync(manifest) && !JSON.parse(readFileSync(manifest, 'utf8')).draft;
+    });
 }
 
 /**

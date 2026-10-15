@@ -41,7 +41,8 @@ um blog pessoal com anotações, experimentos e resenhas de filmes, séries, jog
 - [ngx-translate](https://github.com/ngx-translate/core) para os textos da interface
 - [marked](https://marked.js.org) para renderizar os posts
 - CSS puro com design tokens, webfont do [Tabler Icons](https://tabler.io/icons), fontes Inter e Fira Code
-- [pnpm](https://pnpm.io), [Vitest](https://vitest.dev)
+- [highlight.js](https://highlightjs.org) para blocos de código
+- [pnpm](https://pnpm.io), [Vitest](https://vitest.dev), Docker + nginx em produção
 
 ## Como começar
 
@@ -53,6 +54,7 @@ pnpm start       # servidor de desenvolvimento em http://localhost:4200
 pnpm build       # build de produção; site estático em dist/rndm/browser/
 pnpm test        # testes unitários (Vitest)
 pnpm posts       # valida os posts e regenera o índice de posts e o sitemap
+pnpm icons       # recria a fonte de ícones depois de editar scripts/icons.json
 ```
 
 Use sempre os scripts do pnpm (e não `ng serve`/`ng build` diretos): eles rodam o `pnpm posts` antes.

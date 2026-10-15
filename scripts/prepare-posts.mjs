@@ -4,18 +4,23 @@
 // then writes
 //   - src/content/posts/index.json (ids, newest first), loaded by the home list;
 //   - public/sitemap.xml (home pages + posts, with hreflang alternates).
+// With --production (used by `pnpm build`), posts with `"draft": true` are left out of both files;
+// scripts/prune-drafts.mjs then removes their files from the build output.
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { GUID, LANGS, POSTS_DIR, ROOT, SITE_URL, countWords, readPosts } from './posts-lib.mjs';
 
 const hreflang = { en: 'en', pt: 'pt-BR' };
+const production = process.argv.includes('--production');
 const errors = [];
-const posts = readPosts();
+const allPosts = readPosts();
 
-for (const { id, dir, manifestPath, manifest } of posts) {
+for (const { id, dir, manifestPath, manifest } of allPosts) {
   const fail = (message) => errors.push(`${id}: ${message}`);
   if (!GUID.test(id)) fail('the folder name must be a GUID');
   if (!/^\d{4}-\d{2}-\d{2}$/.test(manifest.date ?? '')) fail('"date" must be YYYY-MM-DD');
+  if (manifest.updated !== undefined && !/^\d{4}-\d{2}-\d{2}$/.test(manifest.updated)) fail('"updated" must be YYYY-MM-DD');
+  if (manifest.draft !== undefined && typeof manifest.draft !== 'boolean') fail('"draft" must be true or false');
   if (!Array.isArray(manifest.availableLangs) || manifest.availableLangs.length === 0) {
     fail('"availableLangs" must list at least one language');
     continue;
@@ -46,6 +51,8 @@ if (errors.length) {
   process.exit(1);
 }
 
+// Drafts are visible while developing, but never published.
+const posts = production ? allPosts.filter((p) => !p.manifest.draft) : allPosts;
 const sorted = [...posts].sort((a, b) => b.manifest.date.localeCompare(a.manifest.date));
 writeFileSync(join(POSTS_DIR, 'index.json'), JSON.stringify(sorted.map((p) => p.id), null, 2) + '\n');
 
@@ -69,4 +76,5 @@ writeFileSync(
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${urls.join('\n')}\n</urlset>\n`,
 );
 
-console.log(`posts: ${posts.length} post(s), index.json and sitemap.xml updated`);
+const drafts = allPosts.length - posts.length;
+console.log(`posts: ${posts.length} post(s)${drafts ? `, ${drafts} draft(s) left out` : ''}, index.json and sitemap.xml updated`);

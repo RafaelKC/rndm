@@ -41,7 +41,8 @@ It is the sibling of my personal site, [chicovis.dev](https://chicovis.dev), and
 - [ngx-translate](https://github.com/ngx-translate/core) for the interface texts
 - [marked](https://marked.js.org) to render the posts
 - Plain CSS with design tokens, [Tabler Icons](https://tabler.io/icons) webfont, Inter and Fira Code fonts
-- [pnpm](https://pnpm.io), [Vitest](https://vitest.dev)
+- [highlight.js](https://highlightjs.org) for code blocks
+- [pnpm](https://pnpm.io), [Vitest](https://vitest.dev), Docker + nginx for production
 
 ## Getting started
 
@@ -53,6 +54,7 @@ pnpm start       # dev server at http://localhost:4200
 pnpm build       # production build; static site in dist/rndm/browser/
 pnpm test        # unit tests (Vitest)
 pnpm posts       # validate the posts and regenerate the post index and sitemap
+pnpm icons       # rebuild the icon font after editing scripts/icons.json
 ```
 
 Always use the pnpm scripts (not bare `ng serve`/`ng build`): they run `pnpm posts` first.
