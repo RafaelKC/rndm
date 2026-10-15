@@ -1,6 +1,9 @@
 # Lives on the server at /opt/rndm/docker-compose.yml (copied by hand, root-owned).
-# Run by deploy/deploy-rndm.sh, which sets RNDM_TAG. Nginx Proxy Manager proxies
-# rndm.chicovis.dev to rndm:80 (the alias below, on the external "web" network).
+# Run by deploy/deploy-rndm.sh, which sets RNDM_TAG.
+#
+# Same pattern as the other services on this VM: the port is published on the host and
+# Nginx Proxy Manager (on another VM) proxies rndm.chicovis.dev to <this VM's private IP>:8092.
+# Keep 8092 closed to the internet: allow it only for the NPM VM's private IP (cloud firewall).
 name: rndm
 
 services:
@@ -9,17 +12,11 @@ services:
     container_name: rndm-container
     restart: always
     mem_limit: 128m
+    ports:
+      - "8092:80"
     healthcheck:
       test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1/en/"]
       interval: 10s
       timeout: 3s
       retries: 3
       start_period: 5s
-    networks:
-      web:
-        aliases:
-          - rndm
-
-networks:
-  web:
-    external: true

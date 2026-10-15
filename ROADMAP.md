@@ -19,6 +19,7 @@ Step-by-step plan to build the **rndm.chicovis.dev** blog, in order. Check each 
 - [x] `Dockerfile`, `nginx.conf` (tested with podman), safe deploy (forced-command script, compose, `ci.yml`, manual `deploy.yml` that builds on the runner), see docs/deploy.md
 - [x] `/new-post` skill with templates, post validation, automatic word count and generated `sitemap.xml`
 - [x] Home list built from the real manifests (generated `posts/index.json`), cards fully clickable
+- [x] `sitemap.xml` generated at build time with `hreflang` alternates, and `robots.txt` pointing to it
 - [x] Post page `/:lang/post/:id`: manifest + Markdown (with raw HTML) per language, prerendered, translated SEO and `BlogPosting` JSON-LD, one example post
 - [x] Static prerender (`@angular/ssr`, `outputMode: static`): `/en/` and `/pt/` are generated as full HTML at build time
 - [x] Home intro and post list with placeholder data (`Post` model, `Localized` content, post cards)
@@ -56,18 +57,7 @@ src/content/posts/
 
 ## Following steps
 
-### 4. Launch checks (after go live)
-
-- [ ] Run Lighthouse (performance, accessibility, SEO) and fix what shows up
-- [ ] Review the Core Web Vitals of the prerendered pages
-
-### 5. Search Console
-
-- [x] `sitemap.xml` generated at build time from the posts, with `<lastmod>` and `hreflang` alternates
-- [x] `robots.txt` points to the sitemap
-- [ ] Register `rndm.chicovis.dev` in Search Console, add the verification meta tag and submit the sitemap
-
-### 6. Go live (the step-by-step guide is kept locally in `docs/deploy.md`, git-ignored because it names the server)
+### 4. Go live (the step-by-step guide is kept locally in `docs/deploy.md`, git-ignored because it names the server)
 
 Safe deploy, same idea as the other projects: GitHub logs into the server over SSH with a dedicated key and user; on the server that key can only run a root-owned script (forced command) that pulls the image we built on the GitHub runner. Done in the repository: `Dockerfile`, `nginx.conf` (tested with podman), `deploy/deploy-rndm.sh` (tested with a fake `docker`: healthy deploy, rollback, tag validation), `deploy/docker-compose.yml`, `ci.yml` and `deploy.yml`.
 
@@ -76,8 +66,16 @@ On the server and on GitHub (in this order):
 - [ ] Server: install the script and the compose file root-owned, create the state folder, reuse the existing deploy user (private guide, step 1)
 - [ ] Create the deploy key and add it to the deploy user's `authorized_keys`, bound to the forced command (step 2)
 - [ ] GitHub: the four `RNDM_DEPLOY_*` secrets, optional `production` environment with reviewers (step 3)
-- [ ] DNS: `rndm.chicovis.dev` pointing at the server
-- [ ] Run **Deploy rndm** once, then make the `ghcr.io/rafaelkc/rndm` package public, and run it again (step 4)
-- [ ] Nginx Proxy Manager: proxy host `rndm.chicovis.dev` → `rndm:80` (or the server's private IP and a published port if NPM runs on another VM), Let's Encrypt, Force SSL, HTTP/2
+- [ ] Cloud firewall: allow `8092/tcp` (the published container port) in the Oracle Security List/NSG for the NPM VM's private IP only (never `0.0.0.0/0`), then test with `curl` from the NPM VM
+- [ ] Cloudflare DNS: `A` record `rndm` for the NPM VM, **DNS only** (no proxy yet)
+- [ ] `dig` and `curl -I http://rndm.chicovis.dev` (the proxy must be off and port 80 must reach NPM)
+- [ ] First deploy: run **Deploy rndm** (it fails at the pull while the package is private), make the `ghcr.io/rafaelkc/rndm` package public, re-run the failed job; confirm `rndm-container` is `healthy` on the ARM VM
+- [ ] `curl` the container directly (before creating the proxy host)
+- [ ] Nginx Proxy Manager: proxy host `rndm.chicovis.dev` → the server's private IP and port 8092, Let's Encrypt, Force SSL, HTTP/2
+- [ ] `curl -I https://rndm.chicovis.dev/en/` (valid certificate, 200) and check the site in the browser
+- [ ] Cloudflare: SSL/TLS mode **Full (strict)**, Rocket Loader and Auto Minify off, then turn the **proxy on** for the record
+- [ ] Test again behind the proxy (`server: cloudflare`, cookies, language switch, theme)
+- [ ] Performance: PageSpeed Insights / Lighthouse on `/en/` and on a post, mobile and desktop (goal 90+), fix and redeploy
+- [ ] Google Search Console: add the property (Domain via DNS TXT, or URL prefix with the meta tag), submit `sitemap.xml`, request indexing for `/en/`, `/pt/` and the first post
 - [ ] Optional: add the `push` trigger to `deploy.yml` once manual deploys are known to be light on the server
 - [ ] Optional: write a blog post about this setup (notes at the end of docs/deploy.md)

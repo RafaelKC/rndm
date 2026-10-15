@@ -132,7 +132,7 @@ Goal: WCAG 2.2 AA on every screen, in both themes and both languages.
 
 Full step-by-step guide: `docs/deploy.md` (local only and git-ignored: it names the server and the deploy user; do not commit it or copy its server details into tracked files).
 
-- `Dockerfile` (Node 24 + pnpm builds, nginx serves `dist/rndm/browser`), `nginx.conf` (routing and cache rules, see its header), `deploy/docker-compose.yml` (service `rndm` on the external `web` network, alias `rndm`; Nginx Proxy Manager proxies `rndm.chicovis.dev` to `rndm:80`).
+- `Dockerfile` (Node 24 + pnpm builds, nginx serves `dist/rndm/browser`), `nginx.conf` (routing and cache rules, see its header), `deploy/docker-compose.yml` (service `rndm` publishing port 8092 on the VM, like the other services there; Nginx Proxy Manager, on another VM, proxies `rndm.chicovis.dev` to the VM's private IP and port 8092).
 - **Safe deploy**: `.github/workflows/deploy.yml` (manual) builds the image on the GitHub runner, pushes it to `ghcr.io/rafaelkc/rndm`, then logs into the server over SSH with a dedicated key. On the server that key is bound to a forced command, `/usr/local/bin/deploy-rndm.sh` (copy in `deploy/deploy-rndm.sh`), root-owned, which only pulls the given tag, restarts the container, checks health and rolls back on failure. **Never build images on the VM, never give the deploy key a shell, and never make the pipeline able to edit the script, compose file or `authorized_keys`.** After editing `deploy/*`, the files must be re-installed on the server by hand (docs/deploy.md).
 - `.github/workflows/ci.yml` runs tests and the build on every push and pull request.
 - Local check: `podman build -t rndm-test . && podman run --rm -p 8099:80 rndm-test`.
