@@ -89,7 +89,7 @@ Tabler Icons webfont (`@tabler/icons-webfont`, imported in `styles.css`), same a
 ### Header and footer
 
 - Fixed header with blur: logo on the left (link to the current language's home); on the right, a "Site" link to `https://chicovis.dev` (new tab, with `sr-only` text announcing it), the theme toggle and the language badge. No section links.
-- Footer: "© {year} Rafael Chicovis. {rights}", centered, 0.7rem, opacity 0.6.
+- Footer: "{location}" above "© {year} Rafael Chicovis. {rights}" (the location, "From Curitiba - Paraná - Brazil", is translated), centered, 0.7rem, opacity 0.6.
 - `Shell` renders: skip-link → header → `<main id="main-content">` (each page renders its own `h1`) → footer, with the footer always at the bottom of the viewport.
 
 ## Accessibility (top priority)

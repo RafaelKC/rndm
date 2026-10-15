@@ -13,18 +13,17 @@ um blog pessoal com anotações, experimentos e resenhas de filmes, séries, jog
 
 ## Capturas de tela
 
-<!--
-  Quando houver posts, coloque as imagens em docs/screenshots/ e troque os placeholders abaixo, por exemplo:
-  <img src="docs/screenshots/home-dark.png" alt="Home com a lista de posts, tema escuro" width="100%">
--->
-
-| Home | Página do post |
-| :---: | :---: |
-| _Captura em breve_ | _Captura em breve_ |
+### Home
 
 | Tema escuro | Tema claro |
 | :---: | :---: |
-| _Captura em breve_ | _Captura em breve_ |
+| ![Home, tema escuro](docs/screenshots/home-dark-pt.jpg) | ![Home, tema claro](docs/screenshots/home-light-pt.jpg) |
+
+### Página do post
+
+| Tema escuro | Tema claro |
+| :---: | :---: |
+| ![Página do post, tema escuro](docs/screenshots/post-dark-pt.jpg) | ![Página do post, tema claro](docs/screenshots/post-light-pt.jpg) |
 
 ## Recursos
 

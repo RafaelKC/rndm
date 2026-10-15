@@ -36,6 +36,7 @@ export const en = {
     site: 'Site',
   },
   footer: {
+    location: 'From Curitiba - Paraná - Brazil',
     rights: 'All rights reserved.',
   },
 };

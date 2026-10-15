@@ -38,6 +38,7 @@ export const pt: Translations = {
     site: 'Site',
   },
   footer: {
+    location: 'De Curitiba - Paraná - Brasil',
     rights: 'Todos os direitos reservados.',
   },
 };

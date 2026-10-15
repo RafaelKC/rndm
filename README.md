@@ -13,18 +13,17 @@ It is the sibling of my personal site, [chicovis.dev](https://chicovis.dev), and
 
 ## Screenshots
 
-<!--
-  When there are posts, add the images to docs/screenshots/ and replace the placeholders below, e.g.:
-  <img src="docs/screenshots/home-dark.png" alt="Home with the post list, dark theme" width="100%">
--->
-
-| Home | Post page |
-| :---: | :---: |
-| _Screenshot coming soon_ | _Screenshot coming soon_ |
+### Home
 
 | Dark theme | Light theme |
 | :---: | :---: |
-| _Screenshot coming soon_ | _Screenshot coming soon_ |
+| ![Home, dark theme](docs/screenshots/home-dark.jpg) | ![Home, light theme](docs/screenshots/home-light.jpg) |
+
+### Post page
+
+| Dark theme | Light theme |
+| :---: | :---: |
+| ![Post page, dark theme](docs/screenshots/post-dark.jpg) | ![Post page, light theme](docs/screenshots/post-light.jpg) |
 
 ## Features
 
