@@ -4,7 +4,7 @@ Personal blog "Random | Rafael Chicovis" (Angular 22, standalone components, sig
 
 ## Language conventions
 
-- **Everything in the repo is written in English**: code, identifiers, component names, comments, commit messages, Markdown files (this one included), default texts.
+- **Everything in the repo is written in English**: code, identifiers, component names, comments, commit messages, Markdown files (this one included), default texts. The only exception is `README.pt-BR.md`, the Portuguese version of `README.md`: **keep both READMEs in sync** whenever one changes.
 - **User-facing content is localized** to `en` (default) and `pt` (pt-BR). Never hardcode visible text, `aria-label`, `alt` or SEO text in a template or component; add a key to `src/app/i18n/en.ts` **and** `pt.ts` (`pt` is typed against `en`, so a missing key fails the build) and use `{{ 'key' | translate }}`.
 
 ## General rules
