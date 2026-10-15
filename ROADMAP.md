@@ -16,7 +16,7 @@ Step-by-step plan to build the **rndm.chicovis.dev** blog, in order. Check each 
 - [x] Switch to pnpm
 - [x] Manifest `draft` (left out of production) and `updated`; syntax highlighting; accessible tag/link color token
 - [x] Smaller bundle: icon font subset (initial JS+CSS 537 kB → 325 kB)
-- [x] `Dockerfile`, `nginx.conf` (tested with podman), `docker-compose.yml`, manual `deploy.yml` that builds on the runner
+- [x] `Dockerfile`, `nginx.conf` (tested with podman), safe deploy (forced-command script, compose, `ci.yml`, manual `deploy.yml` that builds on the runner), see docs/deploy.md
 - [x] `/new-post` skill with templates, post validation, automatic word count and generated `sitemap.xml`
 - [x] Home list built from the real manifests (generated `posts/index.json`), cards fully clickable
 - [x] Post page `/:lang/post/:id`: manifest + Markdown (with raw HTML) per language, prerendered, translated SEO and `BlogPosting` JSON-LD, one example post
@@ -67,12 +67,17 @@ src/content/posts/
 - [x] `robots.txt` points to the sitemap
 - [ ] Register `rndm.chicovis.dev` in Search Console, add the verification meta tag and submit the sitemap
 
-### 6. Go live (manual steps, in order)
+### 6. Go live (the step-by-step guide is kept locally in `docs/deploy.md`, git-ignored because it names the server)
 
-The files are done and the image builds and routes correctly (tested with podman). What is left is on the server and on GitHub:
+Safe deploy, same idea as the other projects: GitHub logs into the server over SSH with a dedicated key and user; on the server that key can only run a root-owned script (forced command) that pulls the image we built on the GitHub runner. Done in the repository: `Dockerfile`, `nginx.conf` (tested with podman), `deploy/deploy-rndm.sh` (tested with a fake `docker`: healthy deploy, rollback, tag validation), `deploy/docker-compose.yml`, `ci.yml` and `deploy.yml`.
 
+On the server and on GitHub (in this order):
+
+- [ ] Server: install the script and the compose file root-owned, create the state folder, reuse the existing deploy user (private guide, step 1)
+- [ ] Create the deploy key and add it to the deploy user's `authorized_keys`, bound to the forced command (step 2)
+- [ ] GitHub: the four `RNDM_DEPLOY_*` secrets, optional `production` environment with reviewers (step 3)
 - [ ] DNS: `rndm.chicovis.dev` pointing at the server
-- [ ] GitHub: run **Actions > Deploy rndm > Run workflow** once (builds and pushes `ghcr.io/rafaelkc/rndm`), then make the package **public** (GitHub profile > Packages > rndm > Package settings > Change visibility), or run `docker login ghcr.io` on the server
-- [ ] Server: `mkdir -p ~/rndm`, fetch `docker-compose.yml`, `docker compose pull && docker compose up -d` (the workflow does this over SSH with the same secrets as the personal site: `OCI_HOST`, `OCI_USER`, `OCI_SSH_KEY`)
-- [ ] Nginx Proxy Manager: proxy host `rndm.chicovis.dev` → `rndm:80`, Let's Encrypt certificate, Force SSL, HTTP/2 (HTTPS is required because the shared cookies are `Secure`)
-- [ ] Optional: add the `push` trigger to `deploy.yml` once deploys are known to be light on the server
+- [ ] Run **Deploy rndm** once, then make the `ghcr.io/rafaelkc/rndm` package public, and run it again (step 4)
+- [ ] Nginx Proxy Manager: proxy host `rndm.chicovis.dev` → `rndm:80` (or the server's private IP and a published port if NPM runs on another VM), Let's Encrypt, Force SSL, HTTP/2
+- [ ] Optional: add the `push` trigger to `deploy.yml` once manual deploys are known to be light on the server
+- [ ] Optional: write a blog post about this setup (notes at the end of docs/deploy.md)

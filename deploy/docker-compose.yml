@@ -1,0 +1,25 @@
+# Lives on the server at /opt/rndm/docker-compose.yml (copied by hand, root-owned).
+# Run by deploy/deploy-rndm.sh, which sets RNDM_TAG. Nginx Proxy Manager proxies
+# rndm.chicovis.dev to rndm:80 (the alias below, on the external "web" network).
+name: rndm
+
+services:
+  rndm:
+    image: ghcr.io/rafaelkc/rndm:${RNDM_TAG:-latest}
+    container_name: rndm-container
+    restart: always
+    mem_limit: 128m
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1/en/"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    networks:
+      web:
+        aliases:
+          - rndm
+
+networks:
+  web:
+    external: true

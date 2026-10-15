@@ -1,9 +1,13 @@
 name: Deploy rndm
 
 # Manual on purpose (Actions > Deploy rndm > Run workflow). To deploy on every push to main,
-# add `push: { branches: [main] }` under `on:`.
-# The image is built here, on the GitHub runner, and the server only pulls it,
-# so the VM never runs a build (that is what exhausts a small VM).
+# add `push: { branches: [main] }` under `on:` once the first deploys have gone well.
+#
+# 1. `image`: builds the Docker image HERE, on the GitHub runner, and pushes it to ghcr.io.
+# 2. `deploy`: logs into the server over SSH with a dedicated deploy key. On the server that key
+#    can run exactly one thing, /usr/local/bin/deploy-rndm.sh (an SSH forced command), which only pulls the
+#    image tag we send and restarts the container. The server never builds anything.
+# Setup: docs/deploy.md
 on:
   workflow_dispatch:
 
@@ -11,11 +15,16 @@ permissions:
   contents: read
   packages: write
 
+concurrency:
+  group: deploy-rndm
+  cancel-in-progress: false
+
 jobs:
   image:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: docker/setup-qemu-action@v3
       - uses: docker/setup-buildx-action@v3
       - uses: docker/login-action@v3
         with:
@@ -26,6 +35,7 @@ jobs:
         with:
           context: .
           push: true
+          platforms: linux/amd64,linux/arm64 # the server is ARM; amd64 kept for local runs
           tags: |
             ghcr.io/rafaelkc/rndm:latest
             ghcr.io/rafaelkc/rndm:${{ github.sha }}
@@ -35,16 +45,20 @@ jobs:
   deploy:
     needs: image
     runs-on: ubuntu-latest
+    environment: production
     steps:
-      - name: Pull and restart on the server
-        uses: appleboy/ssh-action@v1.2.0
-        with:
-          host: ${{ secrets.OCI_HOST }}
-          username: ${{ secrets.OCI_USER }}
-          key: ${{ secrets.OCI_SSH_KEY }}
-          script: |
-            mkdir -p ~/rndm && cd ~/rndm
-            curl -fsSL https://raw.githubusercontent.com/RafaelKC/rndm/main/docker-compose.yml -o docker-compose.yml
-            docker compose pull
-            docker compose up -d
-            docker image prune -f
+      - name: Deploy over SSH (forced command)
+        env:
+          HOST: ${{ secrets.RNDM_DEPLOY_HOST }}
+          SSH_USER: ${{ secrets.RNDM_DEPLOY_USER }}
+          KEY: ${{ secrets.RNDM_DEPLOY_KEY }}
+          KNOWN_HOSTS: ${{ secrets.RNDM_DEPLOY_KNOWN_HOSTS }}
+          TAG: ${{ github.sha }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+          # The server ignores the command text as a command: it only reads it as the image tag.
+          ssh -i ~/.ssh/deploy_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes \
+            "$SSH_USER@$HOST" "$TAG"

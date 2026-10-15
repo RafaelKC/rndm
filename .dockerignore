@@ -8,3 +8,4 @@ dist
 docs
 *.md
 !src/content/**/*.md
+deploy
