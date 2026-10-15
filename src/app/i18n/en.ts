@@ -12,6 +12,12 @@ export const en = {
     switchToLight: 'Switch to light theme',
     switchLanguage: 'Switch language to {{lang}}',
   },
+  home: {
+    greeting: "Hi, I'm",
+    title: 'Random',
+    description:
+      'A personal blog for posting assorted things: notes, experiments, whatever I end up learning and reviews of movies, series, games and books. Mostly software, but not always.',
+  },
   nav: {
     site: 'Site',
   },

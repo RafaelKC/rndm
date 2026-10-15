@@ -7,6 +7,10 @@ import { langGuard, notFoundGuard, rootRedirectGuard } from './core/language.gua
  */
 export const routes: Routes = [
   { path: '', pathMatch: 'full', canActivate: [rootRedirectGuard], children: [] },
-  { path: ':lang', canActivate: [langGuard], children: [] },
+  {
+    path: ':lang',
+    canActivate: [langGuard],
+    children: [{ path: '', loadComponent: () => import('./pages/home/home').then((m) => m.Home) }],
+  },
   { path: '**', canActivate: [notFoundGuard], children: [] },
 ];

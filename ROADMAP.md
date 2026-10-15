@@ -16,9 +16,9 @@ Step-by-step plan to build the **rndm.chicovis.dev** blog, in order. Check each 
 
 ## Next step
 
-### 0. Share theme and language with the personal site (Astro, `../rkc`)
+### 0. Update the personal site (Astro, `../rkc`)
 
-The blog already writes `theme` and `lang` with `Domain=.chicovis.dev`. The Astro site still has to do the same, so a choice made on one site applies to the other. Not started.
+The blog already writes `theme` and `lang` with `Domain=.chicovis.dev`. The Astro site still has to do the same, so a choice made on one site applies to the other, and it needs a way to reach the blog. Not started.
 
 - [ ] Theme script: read the `theme` cookie first, then `localStorage` (legacy fallback), then the system preference
 - [ ] Theme toggle: write the cookie with `theme=dark|light; Domain=.chicovis.dev; Path=/; Max-Age=31536000; SameSite=Lax; Secure`
@@ -26,6 +26,7 @@ The blog already writes `theme` and `lang` with `Domain=.chicovis.dev`. The Astr
 - [ ] Root redirect (`/`): saved `lang` cookie → browser language → default, same order as the blog
 - [ ] Clear the old host-only `theme` cookie (`Max-Age=0`, no `Domain`) before writing the shared one; omit `Domain` on `localhost`
 - [ ] Add a line about theme and language cookies to a future privacy page
+- [ ] Add a "Blog" link to the navbar that goes to `https://rndm.chicovis.dev/<lang>/` (same language as the page), mirroring the "Site" link on the blog
 
 ### 1. Posts as Markdown
 

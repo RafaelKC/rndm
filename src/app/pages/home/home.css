@@ -1,0 +1,49 @@
+.hero {
+  padding-top: 4rem;
+  padding-bottom: 6rem;
+}
+
+.greeting {
+  margin: 0;
+}
+
+.main-title {
+  display: flex;
+  align-items: center;
+  gap: 0.35em;
+  margin: 0;
+  font-size: clamp(2.2rem, 8vw, 5rem);
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.name-avatar {
+  flex-shrink: 0;
+  width: 0.9em;
+  height: 0.9em;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: 47% 30%;
+}
+
+.sub-title {
+  margin: 0.5rem 0 0;
+  color: var(--white);
+  font-size: clamp(1.4rem, 5vw, 3.5rem);
+  font-weight: 800;
+  opacity: 0.9;
+}
+
+.description {
+  max-width: 580px;
+  margin: 2rem 0 0;
+  font-size: 1rem;
+}
+
+@media (min-width: 768px) {
+  .hero {
+    padding-top: 9rem;
+    padding-bottom: 10rem;
+  }
+}

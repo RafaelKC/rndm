@@ -14,6 +14,12 @@ export const pt: Translations = {
     switchToLight: 'Mudar para o tema claro',
     switchLanguage: 'Mudar idioma para {{lang}}',
   },
+  home: {
+    greeting: 'Olá, sou',
+    title: 'Random',
+    description:
+      'Blog pessoal para postar coisas variadas: anotações, experimentos, o que eu for aprendendo e resenhas de filmes, séries, jogos e livros. Principalmente software, mas nem sempre.',
+  },
   nav: {
     site: 'Site',
   },
