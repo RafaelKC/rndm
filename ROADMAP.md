@@ -13,6 +13,9 @@ Step-by-step plan to build the **rndm.chicovis.dev** blog, in order. Check each 
 - [x] Project renamed from `codeme` to `rndm`
 - [x] Localization (i18n): `en` (default) and `pt`, language in the route, ngx-translate, language badge, `hreflang` alternates, theme/language cookies
 - [x] Theme and language cookies shared across `*.chicovis.dev` (blog side)
+- [x] Switch to pnpm
+- [x] Static prerender (`@angular/ssr`, `outputMode: static`): `/en/` and `/pt/` are generated as full HTML at build time
+- [x] Home intro and post list with placeholder data (`Post` model, `Localized` content, post cards)
 
 ## Next step
 
@@ -56,7 +59,7 @@ src/content/posts/
 
 ### 3. Pages
 
-- [ ] Home with the post list (title, date, summary, tags)
+- [ ] Home post list fed by real posts (the list and cards exist, with mock data); make each card link to its post page
 - [ ] Post page (`/en/<slug>`, `/pt/<slug>`), with `h1`, date and tags
 - [ ] Friendly 404 page
 - [ ] Component styles, using only design-system tokens and classes
@@ -69,11 +72,12 @@ src/content/posts/
 - [ ] Post `og:image` (the `cover`, or the site's default image)
 - [ ] `hreflang` alternates between a post's `pt.md` and `en.md`
 
-### 5. Prerender / SSR
+### 5. Prerender new routes
 
-- [ ] Add `@angular/ssr` with `outputMode: static` and prerender every route (both languages)
-- [ ] Verify the generated HTML already contains the post content, in the right language
-- [ ] Upgrade Node to ≥ 24.15 (Angular CLI requirement)
+Prerender itself is done (see "Done"). Left for when posts exist:
+
+- [ ] Add the post routes to `app.routes.server.ts` with `getPrerenderParams` (every slug, both languages)
+- [ ] Verify the generated HTML of a post already contains its content, in the right language
 
 ### 6. Deploy
 

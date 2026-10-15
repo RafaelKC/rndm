@@ -1,5 +1,5 @@
 import { Injectable, Provider } from '@angular/core';
-import { TranslateLoader, TranslationObject, provideTranslateService } from '@ngx-translate/core';
+import { TranslateLoader, TranslationObject, provideTranslateLoader, provideTranslateService } from '@ngx-translate/core';
 import { Observable, of } from 'rxjs';
 import { en } from './en';
 import { pt } from './pt';
@@ -43,6 +43,6 @@ export function provideI18n(): Provider[] {
   return provideTranslateService({
     lang: DEFAULT_LANG,
     fallbackLang: DEFAULT_LANG,
-    loader: BundledTranslateLoader,
+    loader: provideTranslateLoader(BundledTranslateLoader),
   });
 }

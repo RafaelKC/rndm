@@ -1,0 +1,29 @@
+<article class="post-card">
+  <img class="cover" [src]="post().imageUrl" alt="" width="600" height="400" loading="lazy" decoding="async" />
+  <div class="body">
+    <h3 class="title">{{ title() }}</h3>
+    <p class="summary">{{ summary() }}</p>
+    <div class="meta">
+      <ul class="tags" [attr.aria-label]="'posts.tags' | translate">
+        @for (tag of tags(); track tag) {
+          <li class="tag">{{ tag }}</li>
+        }
+      </ul>
+      <p class="info">
+        <time [attr.datetime]="isoDate()">{{ formattedDate() }}</time>
+        <span aria-hidden="true"> - </span>
+        @if (words() !== undefined) {
+          <span>{{ 'posts.words' | translate: { count: words() } }}</span>
+          <span aria-hidden="true"> - </span>
+        }
+        <span class="sr-only">{{ 'posts.availableIn' | translate }}</span>
+        @for (l of langs(); track l.code; let last = $last) {
+          <span [attr.lang]="l.htmlLang" [class.current]="l.current">{{ l.label }}</span>
+          @if (!last) {
+            <span aria-hidden="true"> | </span>
+          }
+        }
+      </p>
+    </div>
+  </div>
+</article>

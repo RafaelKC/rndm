@@ -20,6 +20,12 @@ export const pt: Translations = {
     description:
       'Blog pessoal para postar coisas variadas: anotações, experimentos, o que eu for aprendendo e resenhas de filmes, séries, jogos e livros. Principalmente software, mas nem sempre.',
   },
+  posts: {
+    title: 'Últimos posts',
+    tags: 'Tags',
+    words: '{{count}} palavras',
+    availableIn: 'Disponível em:',
+  },
   nav: {
     site: 'Site',
   },

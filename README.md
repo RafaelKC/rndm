@@ -6,6 +6,7 @@ Source code of **[rndm.chicovis.dev](https://rndm.chicovis.dev)**, "Random | Raf
 
 - [Angular](https://angular.dev) 22 (standalone components, signals)
 - Plain CSS with design tokens and utility classes (no CSS framework), dark/light themes
+- [@angular/ssr](https://angular.dev/guide/prerendering) static prerender (full HTML per route at build time, no Node server)
 - [ngx-translate](https://github.com/ngx-translate/core): `en` (default) and `pt`, language in the route (`/en/...`, `/pt/...`)
 - [Tabler Icons](https://tabler.io/icons) webfont, Inter and Fira Code fonts
 
@@ -16,7 +17,7 @@ Requires Node ≥ 24.15 (or ≥ 22.22.3).
 ```bash
 pnpm install
 pnpm start       # dev server at http://localhost:4200
-pnpm build        # production build in dist/
+pnpm build        # production build; prerendered static site in dist/rndm/browser/
 pnpm test         # unit tests (Vitest)
 ```
 

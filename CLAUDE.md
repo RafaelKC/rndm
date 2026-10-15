@@ -13,7 +13,7 @@ Personal blog "Random | Rafael Chicovis" (Angular 22, standalone components, sig
 - Never write a raw color, radius, spacing or font (`#ff6b00`, `12px`, `Inter`) in a component. Use tokens. If one is missing, add it to `styles.css` (for both themes, if it is a color).
 - Before creating a new class, check whether `styles.css` already has one.
 - Standalone components, `inject()`, `signal`/`computed`. One component per folder (`.ts`, `.html`, `.css`). Layout in `src/app/layout/`, cross-cutting services in `src/app/core/`, translations in `src/app/i18n/`.
-- No SSR/prerender yet. Base SEO lives in `src/index.html` and per-route SEO in `SeoService`.
+- **Static prerender (SSG)** via `@angular/ssr` (`outputMode: static`, no Node server): every public route is rendered to HTML at build time. Base SEO lives in `src/index.html`, per-route SEO in `SeoService`. Code must be safe to run on the server: use `DOCUMENT` (never bare `document`/`window`/`localStorage`) and guard `navigator`.
 
 ## Internationalization (i18n)
 
@@ -21,6 +21,7 @@ Personal blog "Random | Rafael Chicovis" (Angular 22, standalone components, sig
 - **The language is part of the route**: `/en/...` and `/pt/...`. Each version has its own URL, which is what Google indexes. Child routes go under `:lang` in `app.routes.ts`.
 - `/` (and unknown paths) redirect to a language: **saved choice (cookie `lang`) → browser language (`navigator.languages`) → `en`**. See `core/language.guards.ts`.
 - `LanguageService.apply()` sets the route's language (translations + `<html lang>`) and does **not** persist. `remember()` saves the cookie and is called only when the user clicks the language badge. A crawler or a shared link is not a user choice.
+- **Content data** (post titles, summaries, tags, word counts...) is stored as `Localized` objects, e.g. `{ en?: string, pt?: string }` (`i18n/localized.ts`), and resolved at render time with `localize(value, lang)`, which falls back to the default language and then to any available one. Do not duplicate content as separate fields per language.
 - The header badge (`EN`/`PT`, like chicovis.dev) links to the same page in the other language.
 - Cookies: `theme` (`dark|light`) and `lang` (`en|pt`), both first-party, `Path=/`, `Max-Age` 1 year, `SameSite=Lax` (+ `Secure` on HTTPS), written by `CookieService`. On `chicovis.dev` and its subdomains they are written with `Domain=.chicovis.dev`, so they are **shared with the personal site** (same names, values and attributes on both sides; `Domain` is omitted on `localhost`). They are user-requested preferences, with no tracking and no third parties, so **no consent banner is needed**. If analytics, ads or any tracking are ever added, a consent banner (LGPD/GDPR) becomes mandatory first. Googlebot ignores cookies; it relies on the language in the URL.
 
@@ -99,7 +100,8 @@ Goal: WCAG 2.2 AA on every screen, in both themes and both languages.
 - Posts: JSON-LD `BlogPosting` (`headline`, `datePublished`, `dateModified`, `author` → the Person `@id`, `image`, `inLanguage`) and `og:type=article`.
 - Clean, stable, lowercase URLs, with a trailing slash only on the language home (`/en/`). One canonical URL per piece of content. Missing pages show a friendly 404 (not built yet; for now they redirect).
 - Performance is SEO (Core Web Vitals): fonts with `display=swap` and `preconnect`, images with dimensions and `loading="lazy"` below the fold, lazy-loaded routes (`loadComponent`), no heavy dependencies.
-- Current limitation: the app is client-side rendered. Once there is real content (posts), **add prerender/SSR** (`ng add @angular/ssr`, `outputMode: static`) so crawlers and link previews get full HTML in the right language. Do it before publishing the first post. Static hosting must also serve `index.html` for `/en/*` and `/pt/*`.
+- Rendering: routes are prerendered at build time (`src/app/app.routes.server.ts`), so crawlers and link previews get full HTML (content, `title`, `og:*`, `canonical`, `hreflang`, `<html lang>`) per language, with no JS needed. **Every new public route must be added to `app.routes.server.ts`** (with `getPrerenderParams` for dynamic segments such as post slugs) or it will not be prerendered. After a build, check `dist/rndm/browser/<lang>/index.html`.
+- Hosting must serve `<lang>/index.html` for `/en/` and `/pt/`, and `index.csr.html` for `/` and unknown paths (client-rendered: they pick a language from the cookie/browser).
 - Pending: the chicovis.dev `google-site-verification` does not apply to the subdomain; register `rndm.chicovis.dev` in Search Console and add its own meta tag.
 
 ## Commands
@@ -108,7 +110,7 @@ Goal: WCAG 2.2 AA on every screen, in both themes and both languages.
 - `pnpm build`: production build.
 - `pnpm test`: tests (Vitest).
 - Package manager: **pnpm** (never npm or yarn; do not commit `package-lock.json`). Install with `pnpm install`, add dependencies with `pnpm add`. Native build scripts are allowed in `pnpm-workspace.yaml`.
-- Requires Node ≥ 24.15 (or ≥ 22.22.3).
+- Requires Node ≥ 24.15 (or ≥ 22.22.3). Build output: `dist/rndm/browser/`.
 
 ## Checklist before finishing a change
 

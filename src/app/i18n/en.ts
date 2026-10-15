@@ -18,6 +18,12 @@ export const en = {
     description:
       'A personal blog for posting assorted things: notes, experiments, whatever I end up learning and reviews of movies, series, games and books. Mostly software, but not always.',
   },
+  posts: {
+    title: 'Latest posts',
+    tags: 'Tags',
+    words: '{{count}} words',
+    availableIn: 'Available in:',
+  },
   nav: {
     site: 'Site',
   },
