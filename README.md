@@ -14,10 +14,10 @@ Source code of **[rndm.chicovis.dev](https://rndm.chicovis.dev)**, "Random | Raf
 Requires Node ≥ 24.15 (or ≥ 22.22.3).
 
 ```bash
-npm install
-npm start        # dev server at http://localhost:4200
-npm run build    # production build in dist/
-npm test         # unit tests (Vitest)
+pnpm install
+pnpm start       # dev server at http://localhost:4200
+pnpm build        # production build in dist/
+pnpm test         # unit tests (Vitest)
 ```
 
 ## Project structure

@@ -104,9 +104,10 @@ Goal: WCAG 2.2 AA on every screen, in both themes and both languages.
 
 ## Commands
 
-- `npm start`: dev server (`ng serve`). Restart it after editing `angular.json`.
-- `npm run build`: production build.
-- `npm test`: tests (Vitest).
+- `pnpm start`: dev server (`ng serve`). Restart it after editing `angular.json`.
+- `pnpm build`: production build.
+- `pnpm test`: tests (Vitest).
+- Package manager: **pnpm** (never npm or yarn; do not commit `package-lock.json`). Install with `pnpm install`, add dependencies with `pnpm add`. Native build scripts are allowed in `pnpm-workspace.yaml`.
 - Requires Node ≥ 24.15 (or ≥ 22.22.3).
 
 ## Checklist before finishing a change
