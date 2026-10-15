@@ -1,6 +1,7 @@
 {
   "name": "rndm",
   "version": "0.0.0",
+  "license": "MIT",
   "scripts": {
     "ng": "ng",
     "start": "node scripts/prepare-posts.mjs && ng serve",

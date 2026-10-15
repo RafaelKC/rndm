@@ -99,3 +99,7 @@ public/               # robots.txt, sitemap.xml (gerado), favicon
 - Acessibilidade e SEO são requisitos de primeira classe.
 
 Veja o [CLAUDE.md](CLAUDE.md) para as diretrizes completas de design system, acessibilidade e SEO, e o [ROADMAP.md](ROADMAP.md) para o passo a passo do projeto.
+
+## Licença
+
+O código-fonte está sob a [Licença MIT](LICENSE). Os posts (texto e imagens em `src/content/posts`) estão sob [CC BY 4.0](src/content/LICENSE.md): compartilhe e adapte dando crédito ao autor.
