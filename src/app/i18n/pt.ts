@@ -26,6 +26,13 @@ export const pt: Translations = {
     words: '{{count}} palavras',
     availableIn: 'Disponível em:',
   },
+  post: {
+    fallbackNotice: 'Este post não está disponível em {{requested}}. Mostrando a versão em {{shown}}.',
+  },
+  languages: {
+    en: 'inglês',
+    pt: 'português',
+  },
   nav: {
     site: 'Site',
   },

@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
+    "start": "node scripts/generate-posts-index.mjs && ng serve",
+    "build": "node scripts/generate-posts-index.mjs && ng build",
+    "watch": "node scripts/generate-posts-index.mjs && ng build --watch --configuration development",
     "test": "ng test"
   },
   "private": true,
@@ -21,6 +21,7 @@
     "@angular/ssr": "^22.2.2",
     "@ngx-translate/core": "^18.0.0",
     "@tabler/icons-webfont": "^3.49.0",
+    "marked": "^18.1.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },
@@ -28,6 +29,7 @@
     "@angular/build": "^22.2.2",
     "@angular/cli": "^22.2.2",
     "@angular/compiler-cli": "^22.2.0",
+    "@types/node": "^24.19.2",
     "jsdom": "^30.0.0",
     "prettier": "^3.8.1",
     "typescript": "~6.0.2",

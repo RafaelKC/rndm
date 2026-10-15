@@ -25,6 +25,25 @@ Personal blog "Random | Rafael Chicovis" (Angular 22, standalone components, sig
 - The header badge (`EN`/`PT`, like chicovis.dev) links to the same page in the other language.
 - Cookies: `theme` (`dark|light`) and `lang` (`en|pt`), both first-party, `Path=/`, `Max-Age` 1 year, `SameSite=Lax` (+ `Secure` on HTTPS), written by `CookieService`. On `chicovis.dev` and its subdomains they are written with `Domain=.chicovis.dev`, so they are **shared with the personal site** (same names, values and attributes on both sides; `Domain` is omitted on `localhost`). They are user-requested preferences, with no tracking and no third parties, so **no consent banner is needed**. If analytics, ads or any tracking are ever added, a consent banner (LGPD/GDPR) becomes mandatory first. Googlebot ignores cookies; it relies on the language in the URL.
 
+## Posts
+
+- Each post is a folder in `src/content/posts/<guid>/` (the folder name is the post id, a GUID):
+  ```
+  <guid>/
+    manifest.json   # title, summary, cover, tags, date, wordCount, availableLangs (see PostManifest)
+    en.md           # content per language; only the languages listed in availableLangs
+    pt.md
+    assets/         # cover and images, referenced from Markdown as `assets/<file>`
+  ```
+- `angular.json` publishes that folder at `/posts/<guid>/...`. The post page (`/:lang/post/:id`, `pages/post`) fetches the manifest and the Markdown for the page language, or the only available one (a notice says so). `postResolver` does the loading, so the page is prerendered with its content.
+- Markdown is rendered with `marked`. **Raw HTML is allowed in the middle of the Markdown**, but Angular's sanitizer runs on it: scripts, event handlers, `style` attributes and `iframe` are stripped. Start headings at `##` (the page title is the `h1`). Images need meaningful `alt`.
+- The rendered content is styled by the global `.prose` class in `styles.css`.
+- `manifest.json`: `cover` is relative to the post folder (use a raster image, 1200×630, so social platforms accept it as `og:image`); `date` is `YYYY-MM-DD`; every descriptive field is a `Localized` object; keep `wordCount` per language up to date.
+- Post SEO is translated per language: `postResolver` builds `SeoPageData` (title, description, image, `lang` of the content, `alternateLangs`) and `SeoService` emits `title`, `description`, `og:*`, `article:published_time`, `canonical` (the content's language URL), `hreflang` only for the languages that exist, and a `BlogPosting` JSON-LD with `inLanguage`.
+- A new post needs: its folder, an entry per language in `public/sitemap.xml`, and nothing else for prerender (ids are read from the folder names in `app.routes.server.ts`).
+- The home list is built from the real manifests: `scripts/generate-posts-index.mjs` writes `src/content/posts/index.json` (ids, newest first; git-ignored) before `pnpm start`, `pnpm build` and `pnpm watch`, and `PostsService` loads it plus each manifest. **Run the app through the pnpm scripts** (not bare `ng serve`/`ng build`) so the index exists; restart `pnpm start` after adding a post.
+- Post cards are fully clickable: the title is a real link stretched over the card (`.link::after`), with `cursor: pointer`.
+
 ## Design system
 
 Single source of truth: `src/styles.css`.
@@ -97,8 +116,8 @@ Goal: WCAG 2.2 AA on every screen, in both themes and both languages.
   ```
   Every route needs a unique title and description (~155 chars) in both languages. Title format: `"Page | Rafael Chicovis"`.
 - `public/robots.txt` and `public/sitemap.xml` (domain `https://rndm.chicovis.dev`). **Every new public route goes in `sitemap.xml`** for both languages, with `xhtml:link` alternates (and `<lastmod>` for posts).
-- Posts: JSON-LD `BlogPosting` (`headline`, `datePublished`, `dateModified`, `author` → the Person `@id`, `image`, `inLanguage`) and `og:type=article`.
-- Clean, stable, lowercase URLs, with a trailing slash only on the language home (`/en/`). One canonical URL per piece of content. Missing pages show a friendly 404 (not built yet; for now they redirect).
+- Posts: `og:type=article` and a `BlogPosting` JSON-LD are emitted by `SeoService` (see Posts).
+- Clean, stable, lowercase URLs, with a trailing slash only on the language home (`/en/`); nginx must serve `/en/post/<id>` from `en/post/<id>/index.html` without redirecting to a trailing slash (canonical has none). One canonical URL per piece of content. Missing pages show a friendly 404 (not built yet; for now they redirect).
 - Performance is SEO (Core Web Vitals): fonts with `display=swap` and `preconnect`, images with dimensions and `loading="lazy"` below the fold, lazy-loaded routes (`loadComponent`), no heavy dependencies.
 - Rendering: routes are prerendered at build time (`src/app/app.routes.server.ts`), so crawlers and link previews get full HTML (content, `title`, `og:*`, `canonical`, `hreflang`, `<html lang>`) per language, with no JS needed. **Every new public route must be added to `app.routes.server.ts`** (with `getPrerenderParams` for dynamic segments such as post slugs) or it will not be prerendered. After a build, check `dist/rndm/browser/<lang>/index.html`.
 - Hosting must serve `<lang>/index.html` for `/en/` and `/pt/`, and `index.csr.html` for `/` and unknown paths (client-rendered: they pick a language from the cookie/browser).

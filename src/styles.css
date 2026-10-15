@@ -348,3 +348,164 @@ textarea:focus {
   font-size: 0.9rem;
   font-weight: 600;
 }
+
+/* Rich text (rendered Markdown and the HTML inside it) */
+.prose {
+  color: var(--text-dim);
+  font-size: 1rem;
+  line-height: 1.75;
+  overflow-wrap: anywhere;
+}
+
+.prose > :first-child { margin-top: 0; }
+.prose > :last-child { margin-bottom: 0; }
+
+.prose h2,
+.prose h3,
+.prose h4 {
+  margin: var(--space-8) 0 var(--space-3);
+  color: var(--white);
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.prose h2 { font-size: 1.6rem; }
+.prose h3 { font-size: 1.25rem; }
+.prose h4 { font-size: 1.05rem; }
+
+.prose p,
+.prose ul,
+.prose ol,
+.prose pre,
+.prose table,
+.prose figure,
+.prose details,
+.prose blockquote {
+  margin: 0 0 var(--space-5);
+}
+
+.prose ul,
+.prose ol {
+  padding-left: var(--space-6);
+}
+
+.prose li + li {
+  margin-top: var(--space-1);
+}
+
+.prose strong {
+  color: var(--white);
+}
+
+.prose a {
+  color: var(--accent);
+  text-underline-offset: 3px;
+}
+
+.prose a:hover {
+  color: var(--accent-hover);
+}
+
+.prose blockquote {
+  padding: var(--space-1) var(--space-5);
+  border-left: 3px solid var(--accent);
+  color: var(--white);
+  font-style: italic;
+}
+
+.prose code,
+.prose kbd {
+  padding: 0.1em 0.35em;
+  background: var(--bg-light);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--white);
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+}
+
+.prose pre {
+  overflow-x: auto;
+  padding: var(--space-4);
+  background: var(--bg-light);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  line-height: 1.5;
+}
+
+.prose pre code {
+  padding: 0;
+  background: none;
+  border: 0;
+}
+
+.prose mark {
+  padding: 0 0.2em;
+  background: var(--accent-soft);
+  border-radius: var(--radius-sm);
+  color: var(--white);
+}
+
+.prose img,
+.prose video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 0 var(--space-5);
+  border-radius: var(--radius-md);
+}
+
+.prose figure {
+  margin-inline: 0;
+}
+
+.prose figure img {
+  margin-bottom: var(--space-2);
+}
+
+.prose figcaption {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.prose table {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+}
+
+.prose th,
+.prose td {
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border);
+  text-align: left;
+}
+
+.prose th {
+  background: var(--bg-light);
+  color: var(--white);
+}
+
+.prose hr {
+  margin: var(--space-8) 0;
+  border: 0;
+  border-top: 1px solid var(--border);
+}
+
+.prose details {
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.prose summary {
+  color: var(--white);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.prose details[open] summary {
+  margin-bottom: var(--space-2);
+}

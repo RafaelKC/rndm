@@ -1,7 +1,9 @@
 <article class="post-card">
   <img class="cover" [src]="post().imageUrl" alt="" width="600" height="400" loading="lazy" decoding="async" />
   <div class="body">
-    <h3 class="title">{{ title() }}</h3>
+    <h3 class="title">
+      <a class="link" [routerLink]="['/', lang(), 'post', post().id]">{{ title() }}</a>
+    </h3>
     <p class="summary">{{ summary() }}</p>
     <div class="meta">
       <ul class="tags" [attr.aria-label]="'posts.tags' | translate">

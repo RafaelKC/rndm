@@ -22,6 +22,11 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "**/*",
+                "input": "src/content/posts",
+                "output": "/posts"
               }
             ],
             "styles": ["src/styles.css"],

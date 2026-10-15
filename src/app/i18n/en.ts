@@ -24,6 +24,13 @@ export const en = {
     words: '{{count}} words',
     availableIn: 'Available in:',
   },
+  post: {
+    fallbackNotice: 'This post is not available in {{requested}}. Showing the {{shown}} version.',
+  },
+  languages: {
+    en: 'English',
+    pt: 'Portuguese',
+  },
   nav: {
     site: 'Site',
   },

@@ -1,0 +1,35 @@
+<article class="post container">
+  <header>
+    <h1 class="title" [attr.lang]="contentHtmlLang()">{{ title() }}</h1>
+    <img class="cover" [src]="page().post.imageUrl" alt="" width="1200" height="630" fetchpriority="high" />
+    <div class="meta">
+      <p class="info">
+        <time [attr.datetime]="isoDate()">{{ formattedDate() }}</time>
+        @if (words() !== undefined) {
+          <span aria-hidden="true"> - </span>
+          <span>{{ 'posts.words' | translate: { count: words() } }}</span>
+        }
+      </p>
+      <ul class="tags" [attr.aria-label]="'posts.tags' | translate">
+        @for (tag of tags(); track tag) {
+          <li class="tag">{{ tag }}</li>
+        }
+      </ul>
+    </div>
+  </header>
+
+  @if (isFallback()) {
+    <p class="notice" role="note">
+      {{
+        'post.fallbackNotice'
+          | translate
+            : {
+                requested: ('languages.' + lang() | translate),
+                shown: ('languages.' + contentLang() | translate),
+              }
+      }}
+    </p>
+  }
+
+  <div class="prose" [attr.lang]="contentHtmlLang()" [innerHTML]="page().html"></div>
+</article>
