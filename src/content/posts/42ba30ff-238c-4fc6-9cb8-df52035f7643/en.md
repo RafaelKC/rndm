@@ -127,6 +127,12 @@ Linux (x86_64 and arm64, including WSL) and macOS (Intel and Apple Silicon):
 curl -fsSL https://rndm.chicovis.dev/twig/unix-install | sh
 ```
 
+Native Windows (beta), in PowerShell:
+
+```powershell
+irm https://rndm.chicovis.dev/twig/windows-install | iex
+```
+
 The installer checks and installs the dependencies (git, herdr, `az` or `gh`, Claude Code and, optionally, VS Code), downloads the release for your system, verifies its checksum and Sigstore signature, and installs twig, the skill, the herdr plugin and the shell completions. Running it again updates. After that:
 
 ```bash
@@ -134,7 +140,7 @@ twig config edit
 twig doctor
 ```
 
-The short URL is just a redirect to the installer of the latest release on GitHub, so you can read it before running it, which I recommend for anything you pipe into `sh`.
+The short URLs are just redirects to the installer of the latest release on GitHub, so you can read it before running it, which I recommend for anything you pipe into `sh`.
 
 ## Next steps
 
@@ -144,7 +150,7 @@ What is on the [roadmap](https://github.com/RafaelKC/twig/blob/main/docs/ROADMAP
 - **More herdr actions**: open the card or its pull request in the browser, close a card from herdr, show the card status in the sidebar and get a notification when an agent is blocked waiting for me.
 - **Pull request review in the terminal**, with [herdr-reviewr](https://github.com/persiyanov/herdr-reviewr): a worktree created from the PR branch, comments per line, and the agent posting them inline on the PR.
 - **Pull request info from the provider**: status and link of the card's branch PR.
-- **Native Windows**. Today it works through WSL; the native version waits for herdr's Windows support to leave beta.
+- **Native Windows**. It already installs with the command above, but it stays in beta until herdr's Windows support leaves beta. WSL is still the stable option.
 - **Quality**: integration tests for `new`, `add-repo` and `rm`, CI on pull requests and testing on macOS.
 - **A final name**: `twig` is still provisional.
 
